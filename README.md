@@ -6,3 +6,8 @@
 
 웹 사이트는 bootstrap에서 템플릿을 사용했으며 링크는 다음과 같다.<br>
 https://startbootstrap.com/themes/sb-admin-2/
+
+용량이 너무 많기 때문에 템플릿을 제외한 html코드와 flask코드만 업로드 한다.<br>
+*run_server.py : 페이지 렌더링 코드
+*index.html : 상황 발생 횟수를 통계낸 DashBoard
+*cctv.html : cctv영상을 실시간으로 출력하는 페이지
