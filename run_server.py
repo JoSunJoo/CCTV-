@@ -31,14 +31,12 @@ def scheduler():
 def input():
     #cursor의 값이 어떤 형식으로 반환되는지 확인하기!!!
     rows = getTraffic()
-    num = 10;
-    setTraffic(2, num)
+    lists=[]
+    for i in rows:
+        lists.append(i['traffic'])
+        setTraffic(i['id'], i['traffic']+1)
 
-
-
-
-    return redirect(url_for('index'))
-
+    return render_template('index.html')
 
 
 #db연결
@@ -75,7 +73,7 @@ def sql_template(type, sql):
 #등록된 데이터 가져오기(지역 별 traffic)
 def getTraffic():
     sql = "select id, traffic from cctv ORDER BY traffic DESC"
-    return sql_template(2, sql);
+    return sql_template(1, sql);
 
 #데이터 수정하기(cctv번호 -> traffic+1)
 def setTraffic(_id, new_traffic):
