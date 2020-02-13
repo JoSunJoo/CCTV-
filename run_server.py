@@ -36,7 +36,7 @@ def input():
         lists.append(i['traffic'])
         setTraffic(i['id'], i['traffic']+1)
 
-    return render_template('index.html')
+    return render_template('index.html') #redirect로 바꾸기!
 
 
 #db연결
