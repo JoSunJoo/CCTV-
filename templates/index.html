@@ -129,7 +129,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-s font-weight-bold text-primary text-uppercase mb-1">교통사고</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">182건</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ data1 }}건</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -146,7 +146,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-s font-weight-bold text-success text-uppercase mb-1">신호위반</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">1500건</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ data2 }}건</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -232,7 +232,14 @@
                 </div>
               </div>
             </div>
-<input type="hidden" id="php_bs" name="hp_bs" value="20"/>
+
+
+            <input type="hidden" id="php_bs" name="hp_bs" value="{{ data3 }}"/>
+            <input type="hidden" id="php_bs1" name="hp_bs" value="{{ data2 }}"/>
+            <input type="hidden" id="php_bs2" name="hp_bs" value="{{ data3 }}"/>
+
+
+
             <!-- 전국 교통사고 발생 순위 테이블 -->
 
           <div class="col-xl-12 col-lg-7">
@@ -253,22 +260,22 @@
                   <tr class="font-weight-bold text-gray-800">
                     <td>1</td>
                     <td>17</td>
-                    <td>수원시 영통구 매탄동</td>
-                    <td>115</td>
+                    <td>{{ loc1 }}</td>
+                    <td>{{ d1 }}</td>
                   </tr>
 
                   <tr class="font-weight-bold text-gray-800">
                     <td>2</td>
                     <td>41</td>
-                    <td>천안시 동남구 병천면</td>
-                    <td>98</td>
+                    <td>{{ loc2 }}</td>
+                    <td>{{ d2 }}</td>
                   </tr>
 
                   <tr class="font-weight-bold text-gray-800">
                     <td>3</td>
                     <td>2</td>
-                    <td>사랑시 고백구 행복동</td>
-                    <td>46</td>
+                    <td>{{ loc3 }}</td>
+                    <td>{{ d3 }}</td>
                   </tr>
 
                   <tr class="font-weight-bold text-gray-800">
