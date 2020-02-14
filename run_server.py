@@ -5,7 +5,20 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    rows = getTraffic()
+
+    lists=[]
+    data_lists=[]
+    location_lists=[]
+    for i in rows:
+        lists.append(i['traffic'])
+        data_lists.append(i['traffic'])
+        location_lists.append(i['location'])
+        #setTraffic(i['id'], i['traffic']+1)
+    data1=lists[0]
+    data2=lists[1]
+    data3=lists[2]
+    return render_template('index.html', data1=data1, data2=data2, data3=data3, loc1=location_lists[0], loc2=location_lists[1], loc3=location_lists[2], d1=data_lists[0], d2=data_lists[1], d3=data_lists[2])
 
 # CCTV 페이지 렌더링
 @app.route('/cctv')
@@ -31,12 +44,13 @@ def scheduler():
 def input():
     #cursor의 값이 어떤 형식으로 반환되는지 확인하기!!!
     rows = getTraffic()
-    lists=[]
+    data_lists=[]
+    location_lists=[]
     for i in rows:
-        lists.append(i['traffic'])
-        setTraffic(i['id'], i['traffic']+1)
+        data_lists.append(i['traffic'])
+        location_lists.append(i['location'])
 
-    return render_template('index.html') #redirect로 바꾸기!
+    return render_template('index.html', loc1=location_lists[0], loc2=location_lists[1], loc3=location_lists[2], d1=data_lists[0], d2=data_lists[1], d3=data_lists[2])
 
 
 #db연결
@@ -72,7 +86,7 @@ def sql_template(type, sql):
 
 #등록된 데이터 가져오기(지역 별 traffic)
 def getTraffic():
-    sql = "select id, traffic from cctv ORDER BY traffic DESC"
+    sql = "select * from cctv ORDER BY traffic DESC"
     return sql_template(1, sql);
 
 #데이터 수정하기(cctv번호 -> traffic+1)
