@@ -1,6 +1,6 @@
 import time
 import pickle
-import datetime
+from datetime import datetime
 import GradCAM as gradcam
 import cv2
 import face_recognition
@@ -27,7 +27,7 @@ def growthGPUAlloc(gpu_fraction=0.1):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-app.config['DEBUG'] = False
+app.config['DEBUG'] = True
 
 socketio = SocketIO(app)
 
@@ -40,48 +40,10 @@ def noCache(response):
     return response
 
 
-@app.route('/')
-def index():
-    # rows = getTraffic()
-    #
-    # lists=[]
-    # data_lists=[]
-    # location_lists=[]
-    # for i in rows:
-    #     lists.append(i['traffic'])
-    #     data_lists.append(i['traffic'])
-    #     location_lists.append(i['location'])
-    #     #setTraffic(i['id'], i['traffic']+1)
-    # data1=lists[0]
-    # data2=lists[1]
-    # data3=lists[2]
-    # return render_template('dashboard.html', data1=data1, data2=data2, data3=data3, loc1=location_lists[0], loc2=location_lists[1], loc3=location_lists[2], d1=data_lists[0], d2=data_lists[1], d3=data_lists[2])
-    D = datetime.date.today()
-    D.strftime('%b')
-    return render_template('dashboard.html', data=D)
-
-# CCTV 페이지 렌더링
-@app.route('/cctv')
-def cctv():
-    return render_template('index.html')
-
-#데이터 삽입
-@app.route('/input')
-def input():
-    #cursor의 값이 어떤 형식으로 반환되는지 확인하기!!!
-    #rows = getTraffic()
-    #data_lists=[]
-    #location_lists=[]
-    #for i in rows:
-     #   data_lists.append(i['traffic'])
-      #  location_lists.append(i['location'])
-
-    return render_template('index.html', loc1=1, loc2=2, loc3=3, d1=4, d2=5, d3=6)
-
-
 #db연결
 def getConnection():
-    return pymysql.connect(host='http://specialist1.iptime.org/', user='specialist', password='toor', db='dashboard', charset='utf8')
+    return pymysql.connect(host='specialist1.iptime.org', user='specialist', password='toor', db='dashboard', charset='utf8')
+
 
 #sql 중복 부분 리팩토링
 def sql_template(type, sql):
@@ -115,11 +77,41 @@ def getTraffic():
     sql = "select * from cctv ORDER BY traffic DESC"
     return sql_template(1, sql);
 
-#데이터 수정하기(cctv번호 -> traffic+1)
-def setTraffic(_id, new_traffic):
-    sql = "UPDATE cctv SET traffic = "+str(new_traffic)+" WHERE id = "+str(_id)
+#해당 CCTV의 traffic 정보 가져오기
+def getCCTVTraffic(num):
+    sql = "select traffic from cctv where cctv_num = "+str(num)
     return sql_template(3, sql)
 
+#데이터 수정하기(cctv번호 -> traffic+1)
+def setTraffic(num):
+    rows = getCCTVTraffic(num)
+    data = 0
+    for i in rows:
+        data = i['count']
+    sql = "UPDATE cctv SET traffic = "+str(data)+" WHERE cctv_num = "+str(num)
+    return sql_template(3, sql)
+
+@app.route('/')
+def index():
+    rows = getTraffic()
+
+    data_lists=[]
+    location_lists=[]
+    cctv_lists=[]
+    for i in rows:
+        cctv_lists.append(i['cctv_num'])
+        data_lists.append(i['count'])
+        location_lists.append(i['location'])
+        #setTraffic(i['id'], i['traffic']+1)
+    return render_template('dashboard.html', trafData1=data_lists[0], trafData2=data_lists[1], trafData3=data_lists[2], trafData4=data_lists[3], trafData5=data_lists[4],
+                           loc1=location_lists[0], loc2=location_lists[1], loc3=location_lists[2], loc4=location_lists[3], loc5=location_lists[4],
+                           cctv1=cctv_lists[0], cctv2=cctv_lists[1], cctv3=cctv_lists[2], cctv4=cctv_lists[3], cctv5=cctv_lists[4])
+
+
+# CCTV 페이지 렌더링
+@app.route('/cctv')
+def cctv():
+    return render_template('index.html')
 
 
 # 자바스크립트 변경 시 Shift-F5로 갱신
@@ -314,6 +306,7 @@ def stateResponse(stateValue, state):
 # 팝업 정보 전송 및 띄우기
 def popup(cameraNum, state, isGradcam = False):
     with app.app_context():
+        setTraffic(cameraNum, )
         emit('stateWindow', {'cameraNum': cameraNum-1, 'state': state, 'isGradcam': isGradcam}, broadcast=True, namespace='/index')
 
 
