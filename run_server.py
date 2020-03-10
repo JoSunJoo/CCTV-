@@ -3,8 +3,6 @@ import pymysql
 
 app = Flask(__name__)
 
-
-
 # CCTV 페이지 렌더링
 @app.route('/cctv')
 def cctv():
@@ -68,7 +66,7 @@ def getCCTVTraffic(num):
 
 #데이터 수정하기(cctv번호 -> traffic+1)
 def setTraffic():
-    #rows = getCCTVTraffic(num)
+    rows = getCCTVTraffic(num)
     sql = "select * from cctv where cctv_num = 1"
 
     rows=sql_template(1, sql)
@@ -80,7 +78,7 @@ def setTraffic():
 
 @app.route('/input')
 def input():
-    num = 2
+    num = 1
     setTraffic();
     return redirect(url_for('index'))
 
